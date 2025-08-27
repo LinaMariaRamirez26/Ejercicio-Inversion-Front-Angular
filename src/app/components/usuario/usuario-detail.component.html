@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3>Perfil de Usuario</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="usuario; else noUsuario">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Información Personal</h5>
+            <div class="mb-3">
+              <p><strong>ID:</strong> {{usuario.id}}</p>
+              <p><strong>Nombre:</strong> {{usuario.nombre}}</p>
+              <p><strong>Email:</strong> {{usuario.email}}</p>
+              <p><strong>Teléfono:</strong> {{usuario.telefono}}</p>
+              <p><strong>Saldo Disponible:</strong> ${{usuario.saldo | number:'1.0-0'}} COP</p>
+            </div>
+            
+
+          </div>
+            
+          <div class="col-md-6">
+            <h5>Fondos Suscritos</h5>
+            <div *ngIf="usuario.fondosSuscritos && usuario.fondosSuscritos.length > 0; else noFondos">
+              <div class="list-group">
+                <div class="list-group-item" *ngFor="let fondoId of usuario.fondosSuscritos">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="mb-1">{{obtenerNombreFondo(fondoId)}}</h6>
+                    </div>
+                    <button class="btn btn-danger btn-sm" (click)="cancelarSuscripcion(fondoId)">
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noFondos>
+              <div class="alert alert-info">
+                No tienes fondos suscritos actualmente.
+              </div>
+            </ng-template>
+          </div>
+        </div>
+          
+        <div class="mt-4">
+          <a [routerLink]="['/usuario', usuario.id, 'transacciones']" class="btn btn-info me-2">
+            Ver Historial de Transacciones
+          </a>
+          <a routerLink="/fondos" class="btn btn-primary">Volver a Fondos</a>
+        </div>
+      </div>
+      <ng-template #noUsuario>
+        <div class="alert alert-danger">
+          Usuario no encontrado.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

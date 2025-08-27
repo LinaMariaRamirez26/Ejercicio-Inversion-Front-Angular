@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h2>Fondos de Inversión Disponibles</h2>
+  
+  <!-- Indicador de carga -->
+   <div *ngIf="cargando" class="text-center my-5">
+     <div class="spinner-border text-primary" role="status">
+       <span class="sr-only">Cargando...</span>
+     </div>
+     <p class="mt-3">Cargando fondos de inversión...</p>
+   </div>
+  
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !cargando" class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Error de conexión</h4>
+    <p>{{error}}</p>
+    <hr>
+    <p class="mb-0">Verifica que el backend esté ejecutándose en <code>http://localhost:8080</code></p>
+  </div>
+  
+  <!-- Mensaje cuando no hay fondos disponibles -->
+  <div *ngIf="fondos && fondos.length === 0 && !cargando && !error" class="alert alert-info" role="alert">
+    <h4 class="alert-heading">No hay fondos disponibles</h4>
+    <p>No se encontraron fondos de inversión en el sistema.</p>
+  </div>
+  
+  <!-- Lista de fondos -->
+  <div class="row" *ngIf="fondos && fondos.length > 0">
+    <div *ngFor="let fondo of fondos" class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          {{fondo.nombre}}
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{fondo.descripcion}}</p>
+          <a [routerLink]="['/suscribir', fondo.id]" class="btn btn-success">Suscribir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

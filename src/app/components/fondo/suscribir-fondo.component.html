@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      Suscribir Fondo de Inversión
+    </div>
+    <div class="card-body">
+      <!-- Mostrar información del fondo -->
+      <div *ngIf="fondo" class="mb-3">
+        <h5>{{ fondo.nombre }}</h5>
+        <p class="text-muted">{{ fondo.descripcion }}</p>
+      </div>
+
+      <!-- Mostrar mensajes de error o éxito -->
+      <div *ngIf="mensaje" class="alert" [class.alert-danger]="error" [class.alert-success]="!error" role="alert">
+        {{ mensaje }}
+      </div>
+
+      <form (ngSubmit)="suscribir()">
+        <div class="mb-3">
+          <label for="monto" class="form-label">Monto a Invertir (COP)</label>
+          <input type="number" class="form-control" id="monto" [(ngModel)]="monto" name="monto" required (ngModelChange)="generarMensajeNotificacion()">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Preferencia de Notificación</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="preferenciaNotificacion" id="email" value="Email" [(ngModel)]="preferenciaNotificacion" (change)="onPreferenciaChange()">
+            <label class="form-check-label" for="email">
+              Email
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="preferenciaNotificacion" id="sms" value="SMS" [(ngModel)]="preferenciaNotificacion" (change)="onPreferenciaChange()">
+            <label class="form-check-label" for="sms">
+              SMS
+            </label>
+          </div>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-success" [disabled]="!monto || monto < 50000">Suscribir</button>
+        <a routerLink="/fondos" class="btn btn-secondary ms-2">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>

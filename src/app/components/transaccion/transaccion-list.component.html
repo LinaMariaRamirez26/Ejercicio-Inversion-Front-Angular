@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3>Historial de Transacciones</h3>
+    </div>
+    <div class="card-body">
+      <!-- Indicador de carga -->
+      <div *ngIf="cargando" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando historial de transacciones...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="error && !cargando" class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Error al cargar transacciones</h4>
+        <p>{{error}}</p>
+      </div>
+
+      <!-- Lista de transacciones -->
+      <div *ngIf="transacciones && transacciones.length > 0 && !cargando" class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Fondo</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaccion of transacciones">
+              <td>{{ transaccion.fecha | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <span class="badge" 
+                      [class.bg-success]="transaccion.tipo === 'APERTURA'"
+                      [class.bg-danger]="transaccion.tipo === 'CANCELACION'">
+                  {{ transaccion.tipo === 'APERTURA' ? 'Apertura' : 'Cancelación' }}
+                </span>
+              </td>
+              <td>{{ obtenerNombreFondo(transaccion.fondoId) }}</td>
+              <td>${{ transaccion.monto | number:'1.0-0' }} COP</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mensaje cuando no hay transacciones -->
+      <div *ngIf="transacciones && transacciones.length === 0 && !cargando && !error" class="alert alert-info" role="alert">
+        <h4 class="alert-heading">No hay transacciones</h4>
+        <p>No se encontraron transacciones para este usuario.</p>
+      </div>
+
+      <div class="mt-3">
+        <a routerLink="/fondos" class="btn btn-primary">Volver a Fondos</a>
+      </div>
+    </div>
+  </div>
+</div>
