@@ -15,15 +15,6 @@ export class UsuarioService {
   // ID de usuario fijo para el backend
   private readonly USUARIO_ID = 'usuario-unico';
 
-  // Mapeo de IDs de fondos del frontend a IDs del backend
-  private fondoIdMapping: { [key: string]: string } = {
-    'FPV_BTG_PACTUAL_RECAUDADORA': '1',
-    'FPV_BTG_PACTUAL_ECOPETROL': '2',
-    'DEUDAPRIVADA': '3',
-    'FDO-ACCIONES': '4',
-    'FPV_BTG_PACTUAL_DINAMICA': '5'
-  };
-
   constructor(
     private http: HttpClient,
     private transaccionService: TransaccionService
@@ -39,18 +30,14 @@ export class UsuarioService {
     return this.http.get<Usuario>(`${this.apiUrl}/${this.USUARIO_ID}`);
   }
 
-  // Suscribir usuario a un fondo
+  // Suscribir usuario a un fondo (ahora se usa el ID del backend directamente)
   suscribirAFondo(usuarioId: string, fondoId: string, monto: number): Observable<any> {
-    // Convertir el ID del frontend al ID del backend
-    const fondoIdBackend = this.fondoIdMapping[fondoId] || fondoId;
-    return this.http.post<any>(`${this.apiUrl}/${this.USUARIO_ID}/fondos/${fondoIdBackend}?monto=${monto}`, {});
+    return this.http.post<any>(`${this.apiUrl}/${this.USUARIO_ID}/fondos/${fondoId}?monto=${monto}`, {});
   }
 
   // Cancelar suscripción a un fondo
   cancelarSuscripcion(usuarioId: string, fondoId: string): Observable<any> {
-    // Convertir el ID del frontend al ID del backend
-    const fondoIdBackend = this.fondoIdMapping[fondoId] || fondoId;
-    return this.http.delete<any>(`${this.apiUrl}/${this.USUARIO_ID}/fondos/${fondoIdBackend}`);
+    return this.http.delete<any>(`${this.apiUrl}/${this.USUARIO_ID}/fondos/${fondoId}`);
   }
 
   // Obtener historial de transacciones por usuario
