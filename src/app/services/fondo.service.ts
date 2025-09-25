@@ -18,7 +18,11 @@ export class FondoService {
 
   constructor(private http: HttpClient) { }
 
-  // Método para obtener el nombre del fondo por ID del backend
+
+  /**  Metodo para obtener el nombre del fondo por ID del backend
+   *
+   * @param idBackend
+   */
   obtenerNombreFondoPorIdBackend(idBackend: string): string {
     const cached = this.nombreFondoCache[idBackend];
     if (cached) return cached;

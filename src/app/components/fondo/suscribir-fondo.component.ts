@@ -19,11 +19,9 @@ export class SuscribirFondoComponent implements OnInit {
   monto: number = 50000;
   mensaje: string = '';
   error: boolean = false;
-  
   // Preferencias de notificación
   preferenciaNotificacion: string = 'Email'; // 'Email' o 'SMS'
   mensajeNotificacion: string = '';
-  
   // ID fijo del usuario único
   private readonly USUARIO_ID = '1';
 
@@ -57,10 +55,10 @@ export class SuscribirFondoComponent implements OnInit {
 
   generarMensajeNotificacion(): void {
     if (!this.fondo) return;
-    
-    const nombreUsuario = 'Usuario'; // En un caso real, obtendríamos esto del servicio
+
+    const nombreUsuario = 'Usuario';
     const nombreFondo = this.fondo.nombre;
-    
+
     if (this.preferenciaNotificacion === 'Email') {
       this.mensajeNotificacion = `Hola ${nombreUsuario}, te has suscrito al fondo ${nombreFondo} con un monto de ${this.monto} COP.`;
     } else if (this.preferenciaNotificacion === 'SMS') {
@@ -81,7 +79,7 @@ export class SuscribirFondoComponent implements OnInit {
     // Primero actualizar las preferencias de notificación
     const emailPref = this.preferenciaNotificacion === 'Email';
     const smsPref = this.preferenciaNotificacion === 'SMS';
-    
+
     this.usuarioService.actualizarPreferenciasNotificacion(this.USUARIO_ID, emailPref, smsPref).subscribe({
       next: () => {
         // Luego proceder con la suscripción
@@ -119,15 +117,14 @@ export class SuscribirFondoComponent implements OnInit {
 
    manejarErrorSuscripcion(error: any): void {
      console.error('Error al suscribir:', error);
-     
+
      // Verificar si es un error de saldo insuficiente
      if (error.status === 400 && error.error?.message?.includes('saldo')) {
        const nombreFondo = this.fondo?.nombre || 'el fondo seleccionado';
        this.mensaje = `No tiene saldo disponible para vincularse al fondo ${nombreFondo}`;
      } else {
        let mensajeError = error.error?.message || 'Error al procesar la suscripción. Verifique los datos e intente nuevamente.';
-       
-       // Si el mensaje contiene un ID numérico de fondo, reemplazarlo con el nombre
+
        const regex = /fondo (\d+)/i;
        const match = mensajeError.match(regex);
        if (match) {
@@ -135,7 +132,7 @@ export class SuscribirFondoComponent implements OnInit {
          const nombreFondo = this.fondoService.obtenerNombreFondoPorIdBackend(idBackend);
          mensajeError = mensajeError.replace(regex, `fondo ${nombreFondo}`);
        }
-       
+
        this.mensaje = mensajeError;
      }
      this.error = true;

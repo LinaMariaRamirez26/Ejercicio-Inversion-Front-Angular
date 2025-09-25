@@ -22,28 +22,46 @@
       <div *ngIf="transacciones && transacciones.length > 0 && !cargando" class="table-responsive">
         <table class="table table-striped">
           <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Fondo</th>
-              <th>Monto</th>
-            </tr>
+          <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Fondo</th>
+            <th>Monto</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let transaccion of transacciones">
-              <td>{{ transaccion.fecha | date:'dd/MM/yyyy' }}</td>
-              <td>
-                <span class="badge" 
+          <tr *ngFor="let transaccion of transacciones">
+            <td>{{ transaccion.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>
+                <span class="badge"
                       [class.bg-success]="transaccion.tipo === 'APERTURA'"
                       [class.bg-danger]="transaccion.tipo === 'CANCELACION'">
                   {{ transaccion.tipo === 'APERTURA' ? 'Apertura' : 'Cancelación' }}
                 </span>
-              </td>
-              <td>{{ obtenerNombreFondo(transaccion.fondoId) }}</td>
-              <td>${{ transaccion.monto | number:'1.0-0' }} COP</td>
-            </tr>
+            </td>
+            <td>{{ obtenerNombreFondo(transaccion.fondoId) }}</td>
+            <td>${{ transaccion.monto | number:'1.0-0' }} COP</td>
+          </tr>
           </tbody>
         </table>
+
+        <!-- Controles de paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <button class="btn btn-outline-primary btn-sm"
+                  [disabled]="paginaActual === 0"
+                  (click)="paginaAnterior()">
+            Anterior
+          </button>
+
+          <span>Página {{paginaActual + 1}} de {{totalPaginas}}</span>
+
+          <button class="btn btn-outline-primary btn-sm"
+                  [disabled]="paginaActual >= totalPaginas - 1"
+                  (click)="paginaSiguiente()">
+            Siguiente
+          </button>
+
+        </div>
       </div>
 
       <!-- Mensaje cuando no hay transacciones -->

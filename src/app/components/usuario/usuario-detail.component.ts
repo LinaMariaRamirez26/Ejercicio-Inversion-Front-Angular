@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UsuarioDetailComponent implements OnInit {
   usuario: Usuario | null = null;
-  
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -49,7 +49,7 @@ export class UsuarioDetailComponent implements OnInit {
 
   cancelarSuscripcion(fondoId: string): void {
     if (!this.usuario) return;
-    
+
     const nombreFondo = this.obtenerNombreFondo(fondoId);
     if (confirm(`¿Está seguro que desea cancelar el fondo ${nombreFondo}?`)) {
       this.usuarioService.cancelarSuscripcion(this.usuario.id.toString(), fondoId).subscribe({
@@ -61,7 +61,7 @@ export class UsuarioDetailComponent implements OnInit {
         error: (error) => {
           console.error('Error al cancelar fondo:', error);
           let mensajeError = error.error?.message || 'Error al cancelar el fondo. Intente nuevamente.';
-          
+
           // Si el mensaje contiene un ID numérico de fondo, reemplazarlo con el nombre
           const regex = /fondo (\d+)/i;
           const match = mensajeError.match(regex);
@@ -70,7 +70,7 @@ export class UsuarioDetailComponent implements OnInit {
             const nombreFondo = this.fondoService.obtenerNombreFondoPorIdBackend(idBackend);
             mensajeError = mensajeError.replace(regex, `fondo ${nombreFondo}`);
           }
-          
+
           alert(mensajeError);
         }
       });

@@ -16,9 +16,12 @@ import { FondoService } from '../../services/fondo.service';
 export class TransaccionListComponent implements OnInit {
   usuarioId: string = '';
   transacciones: Transaccion[] = [];
+  paginaActual = 0;
+  tamanoPagina = 5;
+  totalPaginas = 0;
   cargando: boolean = false;
   error: string = '';
-  
+
   constructor(
     private route: ActivatedRoute,
     private usuarioService: UsuarioService,
@@ -33,21 +36,28 @@ export class TransaccionListComponent implements OnInit {
   }
 
   cargarTransacciones(): void {
-    this.cargando = true;
-    this.error = '';
-    
-    this.usuarioService.obtenerHistorialTransacciones(this.usuarioId).subscribe({
-      next: (data) => {
-        this.transacciones = data;
-        this.cargando = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar las transacciones', error);
-        this.error = 'Error al cargar el historial de transacciones. Verifique que el backend esté ejecutándose.';
-        this.cargando = false;
-      }
-    });
+    this.usuarioService.obtenerHistorialTransacciones(this.usuarioId, this.paginaActual, this.tamanoPagina)
+      .subscribe({
+        next: (data) => {
+          this.transacciones = data.content;
+          this.totalPaginas = data.totalPages;
+        },
+        error: (error) => {
+          console.error('Error al cargar transacciones', error);
+        }
+      });
   }
+
+  paginaSiguiente(): void {
+    this.paginaActual++;
+    this.cargarTransacciones();
+  }
+
+  paginaAnterior(): void {
+    this.paginaActual--;
+    this.cargarTransacciones();
+  }
+
 
   obtenerNombreFondo(fondoId: string): string {
     return this.fondoService.obtenerNombreFondoPorIdBackend(fondoId);

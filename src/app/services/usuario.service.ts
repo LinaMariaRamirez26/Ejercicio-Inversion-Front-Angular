@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class UsuarioService {
   private apiUrl = `${environment.apiUrl}/usuarios`;
-  
+
   // ID de usuario fijo para el backend
   private readonly USUARIO_ID = 'usuario-unico';
 
@@ -41,8 +41,8 @@ export class UsuarioService {
   }
 
   // Obtener historial de transacciones por usuario
-  obtenerHistorialTransacciones(usuarioId: string): Observable<Transaccion[]> {
-    return this.http.get<Transaccion[]>(`${this.apiUrl}/${this.USUARIO_ID}/transacciones`);
+  obtenerHistorialTransacciones(usuarioId: string, page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${usuarioId}/transacciones?page=${page}&size=${size}`);
   }
 
   // Actualizar preferencias de notificación
